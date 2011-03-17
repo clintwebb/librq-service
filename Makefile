@@ -1,9 +1,16 @@
 ## make file for librq-service.
 
-all: librq-service.so.1.0.1
 
 ARGS=-g -Wall
 OBJS=librq-service.o
+
+DESTDIR=
+INCDIR=$(DESTDIR)/usr/include
+LIBDIR=$(DESTDIR)/usr/lib
+
+
+all: librq-service.so.1.0.1
+
 
 librq-service.o: librq-service.c rq-service.h 
 	gcc -c -fPIC librq-service.c  -o $@ $(ARGS)
@@ -20,20 +27,18 @@ librq-service.so.1.0.1: $(OBJS)
 	
 
 install: librq-service.so.1.0.1 rq-service.h
-	@-test -e /usr/include/rq-service.h && rm /usr/include/rq-service.h
-	cp rq-service.h /usr/include/
-	cp librq-service.so.1.0.1 /usr/lib/
-	@-test -e /usr/lib/librq-service.so && rm /usr/lib/librq-service.so
-	ln -s /usr/lib/librq-service.so.1.0.1 /usr/lib/librq-service.so
-	ldconfig
-	@echo "Install complete."
+	@-test -e $(INCDIR)/rq-service.h && rm $(INCDIR)/rq-service.h
+	cp rq-service.h $(INCDIR)/
+	cp librq-service.so.1.0.1 $(LIBDIR)/
+	@-test -e $(LIBDIR)/librq-service.so && rm $(LIBDIR)/librq-service.so
+	ln -s $(LIBDIR)/librq-service.so.1.0.1 $(LIBDIR)/librq-service.so
 
 
-uninstall: /usr/include/rq-service.h /usr/lib/librq-service.so.1.0.1
-	rm /usr/include/rq-service.h
-	rm /usr/lib/librq-service.so.1.0.1
-	rm /usr/lib/librq-service.so.1
-	rm /usr/lib/librq-service.so
+uninstall: $(INCDIR)/rq-service.h $(LIBDIR)/librq-service.so.1.0.1
+	rm $(INCDIR)/rq-service.h
+	rm $(LIBDIR)/librq-service.so.1.0.1
+	rm $(LIBDIR)/librq-service.so.1
+	rm $(LIBDIR)/librq-service.so
 	
 
 man-pages: manpages/librq-service.3
