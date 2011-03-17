@@ -1,0 +1,3 @@
+librq-service is a system for creating daemons and services that 
+receive work RQ message queues.
+
